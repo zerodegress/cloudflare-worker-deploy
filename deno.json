@@ -1,0 +1,22 @@
+{
+  "name": "@zice/cloudflare-worker-deploy",
+  "version": "0.0.1",
+  "exports": {
+    ".": "./lib.ts"
+  },
+  "tasks": {
+    "lint": "deno lint"
+  },
+  "imports": {
+    "@commander-js/extra-typings": "npm:@commander-js/extra-typings@^14.0.0",
+    "@std/encoding": "jsr:@std/encoding@^1.0.10",
+    "@std/fs": "jsr:@std/fs@^1.0.19",
+    "@std/path": "jsr:@std/path@^1.1.1",
+    "cloudflare": "npm:cloudflare@^4.5.0",
+    "prettier": "npm:prettier@^3.6.2",
+    "rolldown": "npm:rolldown@^1.0.0-beta.32"
+  },
+  "publish": {
+    "include": ["README.md", "LICENSE", "*.ts"]
+  }
+}
