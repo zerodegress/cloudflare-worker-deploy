@@ -3,6 +3,7 @@ import { walk } from '@std/fs'
 import { calculateFileHash } from './util.ts'
 import { encodeBase64 } from '@std/encoding/base64'
 import { relative } from '@std/path'
+import { rolldown } from 'rolldown'
 
 export type DeployConfig = {
   name: string
@@ -129,12 +130,21 @@ export const deploy = async (
       },
       files: {
         'index.js': await (async () => {
-          const content = config.main
-            ? await Deno.readFile(config.main!)
-            : undefined
-          return new File(content ? [content] : [], 'index.js', {
-            type: 'application/javascript+module',
-          })
+          if (config.main) {
+            const bundle = await rolldown({
+              input: config.main,
+            })
+            const bundled = await bundle.generate({
+              format: 'esm',
+            })
+            return new File([bundled.output[0].code], 'index.js', {
+              type: 'application/javascript+module',
+            })
+          } else {
+            return new File([], 'index.js', {
+              type: 'application/javascript+module',
+            })
+          }
         })(),
       },
     })
